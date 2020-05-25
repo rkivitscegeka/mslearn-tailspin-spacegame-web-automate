@@ -76,6 +76,7 @@ stages:
     variables:
     - group: Release
     steps:
+    #Terraform stores the state in a storageaccount, thru backend vars
     - script: |
         # Exit when any command returns a failure status.
         set -e
@@ -100,6 +101,7 @@ stages:
         echo "##vso[task.setvariable variable=WebAppNameDev;isOutput=true]$WebAppNameDev"
       name: 'RunTerraform'
       displayName: 'Run Terraform'
+      # Use variable group predefined vars
       env:
         ARM_CLIENT_ID: $(ARM_CLIENT_ID)
         ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
