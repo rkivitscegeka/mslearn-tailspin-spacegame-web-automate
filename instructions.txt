@@ -1,0 +1,21 @@
+UNIQUE_ID=$RANDOM
+az keyvault create \
+  --name tailspin-vault-$UNIQUE_ID \
+  --resource-group tailspin-spacegame-web-rg \
+  --enabled-for-template-deployment true
+az keyvault show --name tailspin-vault-$UNIQUE_ID --query id --output tsv
+==>/subscriptions/dd656cb4-0dc9-45df-8a6f-7f7d64cad931/resourceGroups/tailspin-spacegame-web-rg/providers/Microsoft.KeyVault/vaults/tailspin-vault-25339
+
+SQL_PASSWORD=$(openssl rand -base64 32)
+az keyvault secret set \
+  --vault-name tailspin-vault-$UNIQUE_ID \
+  --name "adminPassword" \
+  --value "$SQL_PASSWORD"
+
+## firstRun param used by bacpac file task, to determine a onetime only db setup
+az keyvault secret set \
+  --vault-name tailspin-vault-$UNIQUE_ID \
+  --name "firstRun" \
+  --value "true"
+
+  jkrrnyqpllgilm556q2xyjz2w7jy7kmrh7iespg2ukvwc7jbwska
